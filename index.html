@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英文邮件生成器 · AI工具 | jotarou.com</title>
+<meta name="description" content="免费英文邮件模板生成器，支持12种场景，AI模式提供更自然地道的表达。jotarou.com AI工具矩阵。">
+<style>
+:root {
+  --bg:       #f5f0e8;
+  --surface:  #ede8e0;
+  --card:     #faf7f2;
+  --white:    #ffffff;
+  --text:     #2c1f0e;
+  --muted:    #8a7260;
+  --accent:   #d4622a;
+  --accent-h: #b8501f;
+  --accent-l: #fbe8d8;
+  --border:   #d8cfc4;
+  --shadow:   0 2px 14px rgba(44,31,14,.09);
+  --r:        10px;
+  --rs:       6px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.65}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ── Layout ── */
+.wrap{max-width:860px;margin:0 auto;padding:0 16px}
+
+/* ── Header ── */
+header{background:var(--text);padding:13px 0;margin-bottom:26px}
+.h-inner{display:flex;align-items:center;justify-content:space-between}
+.h-brand{display:flex;align-items:center;gap:9px}
+.h-logo{color:var(--accent);font-weight:700;font-size:14px;letter-spacing:.4px}
+.h-sep{color:#5a4535}
+.h-title{color:#f5f0e8;font-size:15px;font-weight:600}
+.h-back{color:#907060;font-size:13px}
+.h-back:hover{color:#f5f0e8;text-decoration:none}
+
+/* ── Mode switch ── */
+.mode-bar{display:flex;gap:0;background:var(--surface);border-radius:var(--r);padding:4px;margin-bottom:22px;border:1px solid var(--border)}
+.mode-btn{flex:1;padding:10px 14px;border:none;background:transparent;border-radius:8px;cursor:pointer;font-size:14px;font-weight:500;color:var(--muted);transition:all .18s;display:flex;align-items:center;justify-content:center;gap:8px}
+.mode-btn.on{background:var(--white);color:var(--text);box-shadow:0 1px 6px rgba(44,31,14,.13)}
+.badge{font-size:11px;padding:2px 7px;border-radius:20px;background:var(--surface);color:var(--muted);transition:all .18s}
+.badge.acc{background:var(--accent-l);color:var(--accent)}
+.mode-btn.on .badge{background:var(--accent-l);color:var(--accent)}
+
+/* ── Cards ── */
+.card{background:var(--card);border-radius:var(--r);border:1px solid var(--border);padding:22px 24px;margin-bottom:16px;box-shadow:var(--shadow)}
+@media(max-width:500px){.card{padding:18px 16px}}
+.ch{display:flex;align-items:center;gap:11px;margin-bottom:18px}
+.cn{width:27px;height:27px;border-radius:50%;background:var(--accent-l);color:var(--accent);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ch h2{font-size:15px;font-weight:600}
+.ch small{color:var(--muted);font-size:12px;font-weight:400;margin-left:2px}
+
+/* ── Scene grid ── */
+.sg{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+@media(max-width:580px){.sg{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:380px){.sg{grid-template-columns:repeat(2,1fr)}}
+.sb{display:flex;flex-direction:column;align-items:center;gap:4px;padding:11px 6px;border:1.5px solid var(--border);border-radius:var(--rs);background:transparent;cursor:pointer;transition:all .18s;color:var(--text);font-size:12px;text-align:center;line-height:1.3}
+.sb .ic{font-size:21px}
+.sb:hover{border-color:var(--accent);background:var(--accent-l)}
+.sb.on{border-color:var(--accent);background:var(--accent-l);color:var(--accent);font-weight:600}
+
+/* ── Formality row ── */
+.frow{display:flex;border:1px solid var(--border);border-radius:var(--rs);overflow:hidden}
+.fb{flex:1;padding:8px 4px;border:none;background:transparent;cursor:pointer;font-size:12px;color:var(--muted);border-right:1px solid var(--border);transition:all .18s;text-align:center}
+.fb:last-child{border-right:none}
+.fb strong{display:block;font-size:13px;color:var(--text);transition:color .18s}
+.fb small{display:block;font-size:11px;transition:color .18s}
+.fb.on{background:var(--accent);color:#fff}
+.fb.on strong,.fb.on small{color:#fff}
+
+/* ── Form ── */
+.fg{margin-bottom:15px}
+.fg label{display:block;font-size:13px;font-weight:600;margin-bottom:5px}
+.opt{color:var(--muted);font-weight:400;font-size:11px}
+.req{color:var(--accent);font-size:11px}
+.fg input:not([type="checkbox"]),.fg select,.fg textarea{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--rs);background:#fff;color:var(--text);font-size:14px;font-family:inherit;transition:border-color .18s}
+.fg input:not([type="checkbox"]):focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--accent)}
+.fg textarea{resize:vertical;min-height:90px}
+.tc{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:480px){.tc{grid-template-columns:1fr}}
+
+/* ── Sensitivity warning ── */
+.sw{background:#fff8e6;border:1px solid #f0c040;border-radius:var(--rs);padding:8px 12px;font-size:12px;color:#7a5a00;margin-top:6px}
+
+/* ── Privacy banner ── */
+.pb{background:#e8f4fd;border:1px solid #bee3f8;border-radius:var(--rs);padding:10px 14px;font-size:13px;color:#1a4a6e;margin-bottom:20px}
+
+/* ── Sentence library ── */
+.lh{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:4px 0}
+.lh h3{font-size:14px;font-weight:600}
+.ti{color:var(--muted);font-size:12px;transition:transform .2s}
+.ti.open{transform:rotate(180deg)}
+.stabs{display:flex;gap:7px;margin:12px 0 10px}
+.stab{padding:4px 13px;border:1px solid var(--border);border-radius:20px;background:transparent;cursor:pointer;font-size:12px;color:var(--muted);transition:all .18s}
+.stab.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.sitems{display:flex;flex-direction:column;gap:7px}
+.si{display:flex;align-items:center;gap:9px;padding:8px 11px;background:var(--surface);border-radius:var(--rs);border:1px solid transparent;cursor:pointer;transition:all .18s}
+.si:hover{border-color:var(--accent);background:var(--accent-l)}
+.si .st{flex:1;font-size:12px;font-style:italic;color:var(--text)}
+.si .sl{font-size:11px;color:var(--muted);background:var(--border);padding:2px 7px;border-radius:10px;flex-shrink:0;white-space:nowrap}
+
+/* ── Sub-mode tabs ── */
+.subtabs{display:flex;border-bottom:2px solid var(--border);margin-bottom:20px}
+.subtab{padding:9px 16px;border:none;background:transparent;cursor:pointer;font-size:13px;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .18s;white-space:nowrap}
+.subtab.on{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+@media(max-width:400px){.subtab{padding:9px 10px;font-size:12px}}
+
+/* ── Key row ── */
+.krow{display:flex;align-items:center;gap:9px}
+.krow input:not([type="checkbox"]){flex:1}
+.rlabel{display:flex;align-items:center;gap:5px;font-size:13px;color:var(--muted);cursor:pointer;white-space:nowrap}
+.khint{font-size:12px;color:var(--muted);margin-top:5px;display:block}
+
+/* ── Generate button area ── */
+.gbtn-wrap{display:flex;justify-content:center;padding:6px 0 2px}
+.btn-primary{background:var(--accent);color:#fff;border:none;padding:12px 36px;border-radius:var(--rs);font-size:15px;font-weight:600;cursor:pointer;transition:all .18s}
+.btn-primary:hover:not(:disabled){background:var(--accent-h)}
+.btn-primary:disabled{background:var(--border);cursor:not-allowed;color:var(--muted)}
+.btn-sm{background:var(--surface);color:var(--text);border:1px solid var(--border);padding:6px 11px;border-radius:var(--rs);font-size:12px;cursor:pointer;transition:all .18s;white-space:nowrap}
+.btn-sm:hover{border-color:var(--accent);color:var(--accent)}
+.btn-ghost{background:transparent;color:var(--accent);border:1px solid var(--accent);padding:7px 16px;border-radius:var(--rs);font-size:13px;cursor:pointer;transition:all .18s}
+.btn-ghost:hover{background:var(--accent-l)}
+.divline{border:none;border-top:1px solid var(--border);margin:16px 0}
+
+/* ── Result ── */
+.rh{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;gap:12px;flex-wrap:wrap}
+.rh h3{font-size:15px;font-weight:700;white-space:nowrap}
+.ract{display:flex;flex-wrap:wrap;gap:6px}
+.subj-box{background:var(--surface);border-radius:var(--rs);padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.subj-lbl{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;flex-shrink:0}
+.subj-txt{font-size:14px;font-weight:600;flex:1;word-break:break-word}
+.body-grid{display:grid;grid-template-columns:1fr;gap:14px}
+.body-grid.bi{grid-template-columns:1fr 1fr}
+@media(max-width:580px){.body-grid.bi{grid-template-columns:1fr}}
+.blang{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px}
+.btext{background:#fff;border:1px solid var(--border);border-radius:var(--rs);padding:16px;white-space:pre-wrap;font-size:14px;line-height:1.8;min-height:150px;width:100%;font-family:inherit;color:inherit;display:block;resize:none; overflow-y:hidden}
+.btext:focus{outline:none;border-color:var(--accent)}
+.zh-row{margin-top:10px;display:flex;justify-content:center}
+.changes-box{margin-top:12px;background:#f0fff4;border:1px solid #9ae6b4;border-radius:var(--rs);padding:14px}
+.changes-title{font-size:13px;font-weight:700;color:#276749;margin-bottom:10px}
+.ci{font-size:13px;color:var(--text);padding:5px 0;border-bottom:1px solid #c6f6d5;line-height:1.6}
+.ci:last-child{border-bottom:none}
+
+/* ── AI Hook ── */
+.hook{margin-top:18px;border:1.5px dashed var(--accent);border-radius:var(--r);overflow:hidden}
+.hook-hd{background:var(--accent-l);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.hook-hd span{font-size:13px;font-weight:600;color:var(--accent)}
+.hook-hd small{font-size:12px;color:var(--muted)}
+.hook-body{position:relative}
+.hook-blur{padding:16px;white-space:pre-wrap;font-size:14px;line-height:1.8;color:var(--text);filter:blur(4.5px);user-select:none;pointer-events:none;max-height:155px;overflow:hidden}
+.hook-over{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;background:rgba(245,240,232,.5);backdrop-filter:blur(1px)}
+.hook-over small{font-size:12px;color:var(--muted)}
+
+/* ── Loading ── */
+.ldr{text-align:center;padding:40px 20px}
+.spin{width:34px;height:34px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:sp .8s linear infinite;margin:0 auto 12px}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* ── History ── */
+.hist-panel{background:var(--card);border-radius:var(--r);border:1px solid var(--border);margin-bottom:40px}
+.hist-hd{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;cursor:pointer;user-select:none}
+.hist-hd span:first-child{font-size:14px;font-weight:600}
+.hist-cnt{font-size:12px;color:var(--muted)}
+.hist-list{padding:0 16px 14px}
+.hist-empty{text-align:center;padding:22px;color:var(--muted);font-size:13px}
+.hi{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:var(--rs);cursor:pointer;transition:background .18s;border-bottom:1px solid var(--border)}
+.hi:last-child{border-bottom:none}
+.hi:hover{background:var(--surface)}
+.hstar{background:none;border:none;cursor:pointer;font-size:15px;padding:2px;flex-shrink:0}
+.hmeta{flex:1;min-width:0}
+.hsubj{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hinfo{font-size:11px;color:var(--muted)}
+.hdel{background:none;border:none;cursor:pointer;color:var(--muted);font-size:14px;padding:4px;flex-shrink:0}
+.hdel:hover{color:var(--accent)}
+
+/* ── Toast ── */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--text);color:#f5f0e8;padding:10px 22px;border-radius:22px;font-size:14px;z-index:999;opacity:0;transition:opacity .28s;pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center}
+.toast.show{opacity:1}
+
+/* ── Footer ── */
+footer{background:var(--text);padding:16px 0;margin-top:10px}
+footer p{color:#7a6050;font-size:12px;text-align:center}
+footer a{color:var(--accent)}
+
+/* ── Utility ── */
+.hidden{display:none}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap h-inner">
+    <div class="h-brand">
+      <a href="/" class="h-logo">jotarou.com</a>
+      <span class="h-sep">/</span>
+      <span class="h-title">英文邮件生成器</span>
+    </div>
+    <a href="/tools" class="h-back">← 工具列表</a>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="mode-bar">
+    <button class="mode-btn on" id="btn-free" onclick="switchMode('free')">
+      🆓 免费模式 <span class="badge" id="badge-free">无需Key</span>
+    </button>
+    <button class="mode-btn" id="btn-ai" onclick="switchMode('ai')">
+      ✨ AI模式 <span class="badge acc" id="badge-ai">需API Key</span>
+    </button>
+  </div>
+
+  <div id="free-panel">
+
+    <div class="card" id="c-scene">
+      <div class="ch"><div class="cn">1</div><h2>选择邮件场景</h2></div>
+      <div class="sg" id="scene-grid"></div>
+    </div>
+
+    <div class="card hidden" id="c-settings">
+      <div class="ch"><div class="cn">2</div><h2>基本设置</h2></div>
+      <div class="fg">
+        <label>正式程度</label>
+        <div class="frow" id="free-frow">
+          <button class="fb on" data-v="formal" onclick="setFormality('free','formal')"><strong>正式</strong><small>上级/客户/陌生人</small></button>
+          <button class="fb" data-v="standard" onclick="setFormality('free','standard')"><strong>标准</strong><small>职场通用</small></button>
+          <button class="fb" data-v="casual" onclick="setFormality('free','casual')"><strong>轻松</strong><small>熟识同事</small></button>
+        </div>
+      </div>
+      <div class="tc">
+        <div class="fg">
+          <label>收件人称呼 <span class="opt">选填</span></label>
+          <input type="text" id="free-rec" placeholder="如：Mr. Chen / Sarah">
+        </div>
+        <div class="fg">
+          <label>你的署名 <span class="req">* 必填</span></label>
+          <input type="text" id="free-sender" placeholder="如：Zhang Wei / Li Ming">
+        </div>
+      </div>
+    </div>
+
+    <div class="card hidden" id="c-fields">
+      <div class="ch"><div class="cn">3</div><h2 id="fields-title">填写邮件内容</h2></div>
+      <div id="dyn-fields"></div>
+    </div>
+
+    <div class="card hidden" id="c-lib">
+      <div class="lh" onclick="toggleLib()">
+        <h3>📚 常用句型库 <span style="color:var(--muted);font-weight:400;font-size:12px">· 点击自动插入编辑区并复制</span></h3>
+        <span class="ti" id="lib-ti">▼</span>
+      </div>
+      <div id="lib-body" class="hidden">
+        <div class="stabs">
+          <button class="stab on" data-cat="openings" onclick="showSentCat('openings')">开头句</button>
+          <button class="stab" data-cat="transitions" onclick="showSentCat('transitions')">过渡句</button>
+          <button class="stab" data-cat="closings" onclick="showSentCat('closings')">结尾句</button>
+        </div>
+        <div class="sitems" id="sent-items"></div>
+      </div>
+    </div>
+
+    <div class="gbtn-wrap hidden" id="free-gbtn">
+      <button class="btn-primary" onclick="generateFree()">生成邮件草稿 →</button>
+    </div>
+  </div>
+
+  <div class="hidden" id="ai-panel">
+    <div class="card">
+
+      <div class="pb">
+        🔒 <strong>隐私提示：</strong>请将真实公司名、人名、报价、订单号等敏感信息替换为占位符（如 [公司A]、[对方姓名]、[金额XXXX]）再提交。
+      </div>
+
+      <div class="subtabs">
+        <button class="subtab on" onclick="setAISub('gen')">📝 中文生成</button>
+        <button class="subtab" onclick="setAISub('polish')">✨ 润色草稿</button>
+        <button class="subtab" onclick="setAISub('reply')">↩️ 回复邮件串</button>
+      </div>
+
+      <div id="ai-gen">
+        <div class="fg">
+          <label>用中文描述你想在邮件中表达的内容</label>
+          <textarea id="ai-intent" rows="4" placeholder="例：告诉对方我很感兴趣这个产品经理职位，有4年互联网产品经验，希望能安排线上面试" oninput="chkSensitive(this,'warn-intent')"></textarea>
+          <div class="sw hidden" id="warn-intent"></div>
+        </div>
+        <div class="tc">
+          <div class="fg">
+            <label>收件人称呼 <span class="opt">选填</span></label>
+            <input type="text" id="ai-rec" placeholder="如：Dr. Smith / Hiring Manager">
+          </div>
+          <div class="fg">
+            <label>你的署名</label>
+            <input type="text" id="ai-sender" placeholder="如：Zhang Wei">
+          </div>
+        </div>
+        <div class="fg">
+          <label>正式程度</label>
+          <div class="frow" id="ai-frow-gen">
+            <button class="fb" data-v="formal" onclick="setFormality('ai','formal')"><strong>正式</strong><small>上级/客户</small></button>
+            <button class="fb on" data-v="standard" onclick="setFormality('ai','standard')"><strong>标准</strong><small>职场通用</small></button>
+            <button class="fb" data-v="casual" onclick="setFormality('ai','casual')"><strong>轻松</strong><small>熟识同事</small></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="hidden" id="ai-polish">
+        <div class="fg">
+          <label>粘贴你的英文草稿（Chinglish 没关系，AI 帮你改地道）</label>
+          <textarea id="ai-draft" rows="6" placeholder="例：I very sorry for the late of reply. I think your proposal is very good and want to cooperate with you. Please give me a chance to explain more..." oninput="chkSensitive(this,'warn-draft')"></textarea>
+          <div class="sw hidden" id="warn-draft"></div>
+        </div>
+        <div class="tc">
+          <div class="fg">
+            <label>润色风格</label>
+            <div class="frow" id="ai-frow-polish">
+              <button class="fb" data-v="formal" onclick="setFormality('ai','formal')"><strong>正式</strong></button>
+              <button class="fb on" data-v="standard" onclick="setFormality('ai','standard')"><strong>标准</strong></button>
+              <button class="fb" data-v="casual" onclick="setFormality('ai','casual')"><strong>轻松</strong></button>
+            </div>
+          </div>
+          <div class="fg">
+            <label>润色偏好</label>
+            <select id="polish-pref">
+              <option value="natural">地道自然优先</option>
+              <option value="preserve">保留原有风格</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="hidden" id="ai-reply">
+        <div class="fg">
+          <label>粘贴完整邮件串 <span class="opt">含历史邮件效果更好</span></label>
+          <textarea id="ai-thread" rows="6" placeholder="粘贴整个邮件对话记录（包括对方原文和历史往来），AI 会读取完整上下文来生成准确的回复..." oninput="chkSensitive(this,'warn-thread')"></textarea>
+          <div class="sw hidden" id="warn-thread"></div>
+        </div>
+        <div class="fg">
+          <label>我的回复要点 <span class="opt">用中文写，说明你要表达什么</span></label>
+          <textarea id="ai-reply-pts" rows="3" placeholder="例：同意对方的会议邀请，但时间改到下周四下午3点，希望对方确认是否可行"></textarea>
+        </div>
+        <div class="tc">
+          <div class="fg">
+            <label>我的署名</label>
+            <input type="text" id="ai-reply-sender" placeholder="如：Zhang Wei">
+          </div>
+          <div class="fg">
+            <label>回复语气</label>
+            <div class="frow" id="ai-frow-reply">
+              <button class="fb" data-v="formal" onclick="setFormality('ai','formal')"><strong>正式</strong></button>
+              <button class="fb on" data-v="standard" onclick="setFormality('ai','standard')"><strong>标准</strong></button>
+              <button class="fb" data-v="casual" onclick="setFormality('ai','casual')"><strong>轻松</strong></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="divline">
+
+      <div class="tc">
+        <div class="fg">
+          <label>API Key（jotarou.com）</label>
+          <div class="krow">
+            <input type="password" id="api-key" placeholder="sk-...">
+            <label class="rlabel"><input type="checkbox" id="rem-key"> 记住</label>
+          </div>
+          <span class="khint">还没有Key？<a href="https://jotarou.com" target="_blank">jotarou.com 注册</a> 即可获取</span>
+        </div>
+        <div class="fg">
+          <label>使用模型</label>
+          <select id="ai-model">
+            <option value="deepseek-chat">DeepSeek Chat（推荐 · 经济高效）</option>
+            <option value="gpt-4o-mini">GPT-4o Mini（快速）</option>
+            <option value="gpt-4o">GPT-4o（高质量）</option>
+            <option value="claude-sonnet-4-6">Claude Sonnet（Premium）</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="gbtn-wrap">
+        <button class="btn-primary" id="ai-gbtn" onclick="generateAI()">✨ AI 生成</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="result-area" class="hidden">
+    <div class="card">
+
+      <div id="r-loading" class="ldr hidden">
+        <div class="spin"></div>
+        <p style="color:var(--muted);font-size:14px">AI 生成中，稍等...</p>
+      </div>
+
+      <div id="r-content" class="hidden">
+
+        <div class="rh">
+          <h3>✉️ 生成结果</h3>
+          <div class="ract">
+            <button class="btn-sm" onclick="copySubj(this)">复制主题行</button>
+            <button class="btn-sm" onclick="copyBody(this)">复制正文</button>
+            <button class="btn-sm" onclick="copyAll(this)">复制全部</button>
+            <button class="btn-sm" onclick="openMailto()">📧 邮件App打开</button>
+            <button class="btn-sm" onclick="dlTxt()">⬇ .txt</button>
+            <button class="btn-sm" onclick="saveCurrent()" style="border-color:var(--accent);color:var(--accent)">⭐ 保存</button>
+          </div>
+        </div>
+
+        <div class="subj-box">
+          <span class="subj-lbl">Subject</span>
+          <span class="subj-txt" id="r-subj"></span>
+        </div>
+
+        <div id="body-grid" class="body-grid">
+          <div>
+            <div class="blang" id="en-lbl">英文正文 <span style="font-weight:400;text-transform:none;color:var(--muted);margin-left:5px">(点击可直接修改)</span></div>
+            <textarea class="btext" id="r-en"></textarea>
+          </div>
+          <div class="hidden" id="zh-col">
+            <div class="blang">中文对照</div>
+            <div class="btext" id="r-zh" readonly></div>
+          </div>
+        </div>
+
+        <div class="zh-row hidden" id="zh-toggle-row">
+          <button class="btn-ghost" id="zh-btn" onclick="toggleZh()">显示中文对照</button>
+        </div>
+
+        <div id="changes-box" class="changes-box hidden">
+          <div class="changes-title">✏️ 修改说明</div>
+          <div id="changes-content"></div>
+        </div>
+
+        <div id="ai-hook" class="hook hidden">
+          <div class="hook-hd">
+            <span>✨ AI 加强版预览</span>
+            <small>语气更自然 · 表达更地道 · 针对场景深度优化</small>
+          </div>
+          <div class="hook-body">
+            <pre class="hook-blur" id="hook-txt"></pre>
+            <div class="hook-over">
+              <button class="btn-primary" onclick="switchMode('ai')" style="font-size:14px;padding:10px 26px">输入 API Key 解锁完整版 →</button>
+              <small>还没有Key？<a href="https://jotarou.com" target="_blank">前往 jotarou.com 注册</a></small>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="hist-panel">
+    <div class="hist-hd" onclick="toggleHist()">
+      <span>📁 历史记录</span>
+      <span class="hist-cnt" id="hist-cnt">共 0 封</span>
+      <span class="ti" id="hist-ti">▼</span>
+    </div>
+    <div id="hist-body" class="hidden">
+      <div class="hist-list" id="hist-list"></div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>© 2024 <a href="https://jotarou.com">jotarou.com</a> · AI工具矩阵 · 输入内容经 jotarou.com API 网关转发至大模型服务商，网关不持久化对话内容 · <a href="/tools">更多工具</a></p>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════
+// CONSTANTS
+// ═══════════════════════════════════════════
+
+const SCENES = [
+  { id:'job_app', name:'求职申请', icon:'💼',
+    fields:[
+      {id:'position', label:'应聘岗位', ph:'如：后端工程师', req:true},
+      {id:'company',  label:'目标公司', ph:'如：字节跳动', req:true},
+      {id:'strength', label:'核心优势（一句话）', ph:'如：3年Python后端开发经验，主导过高并发系统优化', req:true},
+    ]},
+  { id:'interview_fu', name:'面试跟进', icon:'🎯',
+    fields:[
+      {id:'position',      label:'面试岗位', ph:'如：产品经理', req:true},
+      {id:'company',       label:'公司名称', ph:'如：腾讯', req:true},
+      {id:'interview_date',label:'面试日期', type:'date', req:true},
+      {id:'fu_type',       label:'跟进目的', type:'select',
+        opts:['感谢面试官 + 确认进度','仅确认进度','仅感谢面试官'], req:true},
+    ]},
+  { id:'thank_you', name:'感谢信', icon:'🙏',
+    fields:[
+      {id:'role',    label:'对方身份', ph:'如：导师 / 客户 / 同事', req:true},
+      {id:'occasion',label:'感谢的具体事项', ph:'如：帮助我完成了项目答辩', req:true},
+    ]},
+  { id:'leave_req', name:'请假申请', icon:'📅',
+    fields:[
+      {id:'leave_type', label:'假期类型', type:'select',
+        opts:['病假 (Sick Leave)','事假 (Personal Leave)','年假 (Annual Leave)','婚假 (Marriage Leave)','产假/陪产假 (Maternity/Paternity Leave)','丧假 (Bereavement Leave)'], req:true},
+      {id:'start_date', label:'开始日期', type:'date', req:true},
+      {id:'end_date',   label:'结束日期', type:'date', req:true},
+      {id:'reason',     label:'原因', ph:'如：身体不适需要休息', req:false},
+    ]},
+  { id:'meeting_inv', name:'会议邀请', icon:'📋',
+    fields:[
+      {id:'topic',    label:'会议主题', ph:'如：Q3产品规划讨论', req:true},
+      {id:'time',     label:'时间', ph:'如：2024年7月15日 14:00', req:true},
+      {id:'location', label:'地点/会议链接', ph:'如：会议室A / Zoom链接', req:true},
+      {id:'agenda',   label:'议程要点', ph:'如：回顾Q2数据、确定Q3目标、任务分配', req:false},
+    ]},
+  { id:'follow_up', name:'催促回复', icon:'⏰',
+    fields:[
+      {id:'orig_subj', label:'原邮件主题', ph:'如：关于项目合作的报价询问', req:true},
+      {id:'sent_date', label:'原邮件发送日期', type:'date', req:true},
+      {id:'deadline',  label:'期望回复截止时间', ph:'如：本周五 / 6月20日前', req:false},
+    ]},
+  { id:'decline_offer', name:'拒绝Offer', icon:'❌',
+    fields:[
+      {id:'company',  label:'公司名称', ph:'如：某互联网公司', req:true},
+      {id:'position', label:'岗位名称', ph:'如：前端工程师', req:true},
+      {id:'reason',   label:'拒绝原因', ph:'如：决定接受更契合长期规划的机会', req:false},
+    ]},
+  { id:'biz_collab', name:'商务合作', icon:'🤝',
+    fields:[
+      {id:'my_name',   label:'我的姓名/公司', ph:'如：张明 / 星途科技', req:true},
+      {id:'direction', label:'合作方向', ph:'如：AI内容工具的渠道推广合作', req:true},
+      {id:'next_step', label:'期望下一步', ph:'如：安排一次20分钟视频通话', req:true},
+    ]},
+  { id:'complaint', name:'投诉', icon:'📢',
+    fields:[
+      {id:'item',       label:'订单号/产品名', ph:'如：订单#20240605 / MacBook Pro', req:true},
+      {id:'problem',    label:'问题描述', ph:'如：收到商品时包装破损、屏幕有划痕', req:true},
+      {id:'resolution', label:'期望解决方案', ph:'如：退款 / 更换新品 / 提供补偿', req:true},
+    ]},
+  { id:'apology', name:'道歉', icon:'💙',
+    fields:[
+      {id:'incident', label:'事项描述', ph:'如：未能按时提交季度报告', req:true},
+      {id:'impact',   label:'影响说明', ph:'如：延误了整个团队的进度', req:true},
+      {id:'remedy',   label:'补救措施', ph:'如：已优先处理，明天上午前可完成提交', req:true},
+    ]},
+  { id:'intro', name:'介绍引荐', icon:'🔗',
+    fields:[
+      {id:'name',    label:'被引荐人姓名', ph:'如：Li Hua / 李华', req:true},
+      {id:'bg',      label:'被引荐人背景', ph:'如：资深全栈工程师，专注Web3领域3年', req:true},
+      {id:'purpose', label:'引荐目的', ph:'如：希望探讨贵司的技术岗位机会', req:true},
+    ]},
+  { id:'resign', name:'离职通知', icon:'👋',
+    fields:[
+      {id:'last_day', label:'最后工作日', type:'date', req:true},
+      {id:'handover', label:'工作交接安排', ph:'如：将在离职前完成项目文档整理，协助培训接替人员', req:true},
+    ]},
+];
+
+const SL = {
+  openings:{
+    formal:[
+      {t:"I am writing to express my sincere interest in...",l:"表达目的"},
+      {t:"I hope this message finds you well. I am reaching out to...",l:"礼貌开场"},
+      {t:"I am writing with reference to...",l:"引用背景"},
+      {t:"I am writing to formally bring to your attention...",l:"正式告知"},
+      {t:"Please allow me to take this opportunity to...",l:"礼貌引入"},
+      {t:"I am contacting you on behalf of...",l:"代表身份"},
+      {t:"I trust this communication finds you in good health. I write to...",l:"问候开场"},
+      {t:"I am writing in response to your recent correspondence regarding...",l:"回应来信"},
+    ],
+    standard:[
+      {t:"I'm reaching out regarding...",l:"切入主题"},
+      {t:"Hope you're doing well! I wanted to...",l:"友好开场"},
+      {t:"I'm following up on...",l:"跟进事项"},
+      {t:"Just wanted to get in touch about...",l:"随和切入"},
+      {t:"I'm writing to let you know that...",l:"通知开场"},
+      {t:"Thanks for getting back to me. I wanted to...",l:"感谢回复"},
+      {t:"I'm getting in touch because...",l:"说明原因"},
+      {t:"Wanted to drop you a quick note about...",l:"简短说明"},
+    ],
+    casual:[
+      {t:"Quick note about...",l:"简短说明"},
+      {t:"Hey, just wanted to touch base on...",l:"轻松开场"},
+      {t:"Hope all's going well! I've been meaning to...",l:"友好开场"},
+      {t:"Just a heads up on...",l:"提前告知"},
+      {t:"Checking in about...",l:"轻松跟进"},
+      {t:"Hey! So I wanted to bring up...",l:"随意引入"},
+      {t:"Quick question/update about...",l:"简洁开场"},
+      {t:"Hope you're having a good week! Wanted to...",l:"问候开场"},
+    ]
+  },
+  transitions:{
+    formal:[
+      {t:"I would be grateful if you could kindly...",l:"礼貌请求"},
+      {t:"In light of the foregoing, I would like to...",l:"承上启下"},
+      {t:"Please find the relevant documentation attached for your perusal.",l:"附件说明"},
+      {t:"I would appreciate your prompt attention to this matter.",l:"强调重要"},
+      {t:"Should you require any additional information, please do not hesitate to contact me.",l:"补充信息"},
+      {t:"I trust this arrangement meets your requirements.",l:"确认安排"},
+      {t:"I would welcome the opportunity to discuss this further at your convenience.",l:"邀请沟通"},
+      {t:"I look forward to your favorable response at your earliest convenience.",l:"期待回复"},
+    ],
+    standard:[
+      {t:"Please let me know if you have any questions.",l:"邀请追问"},
+      {t:"I've attached the relevant files for your reference.",l:"附件说明"},
+      {t:"Looking forward to hearing your thoughts on this.",l:"期待反馈"},
+      {t:"Happy to set up a call if that would be easier.",l:"提议通话"},
+      {t:"Let me know if you need any additional details.",l:"补充信息"},
+      {t:"Feel free to reach out if anything is unclear.",l:"随时联系"},
+      {t:"I can be available at your convenience for a follow-up.",l:"配合安排"},
+      {t:"Please don't hesitate to get back to me with any questions.",l:"欢迎追问"},
+    ],
+    casual:[
+      {t:"LMK if you have any questions!",l:"随时提问"},
+      {t:"Totally happy to hop on a quick call if needed.",l:"随时通话"},
+      {t:"Let me know what you think!",l:"期待意见"},
+      {t:"Feel free to ping me anytime.",l:"随时联系"},
+      {t:"Happy to chat more about this.",l:"欢迎聊聊"},
+      {t:"No pressure, just let me know!",l:"低压力"},
+      {t:"Shoot me a message if you need anything.",l:"随时联系"},
+      {t:"Can always jump on a call to talk it through.",l:"提议通话"},
+    ]
+  },
+  closings:{
+    formal:[
+      {t:"Thank you for your time and consideration. I look forward to hearing from you.",l:"正式结尾"},
+      {t:"I appreciate your prompt attention to this matter.",l:"期待及时回复"},
+      {t:"Please do not hesitate to contact me should you require any further clarification.",l:"后续联系"},
+      {t:"Thank you once again for your invaluable assistance in this matter.",l:"感谢帮助"},
+      {t:"I remain at your disposal for any further information you may require.",l:"随时配合"},
+      {t:"I trust you will give this matter your careful consideration.",l:"期待重视"},
+      {t:"Your prompt response would be greatly appreciated.",l:"期待及时回复"},
+      {t:"I hope this is satisfactory and look forward to your confirmation.",l:"期待确认"},
+    ],
+    standard:[
+      {t:"Thanks for your time, and looking forward to hearing from you!",l:"期待回音"},
+      {t:"Looking forward to connecting!",l:"期待联络"},
+      {t:"Thanks again for your help – really appreciate it.",l:"感谢帮助"},
+      {t:"Let me know if there's anything else I can help with.",l:"后续支持"},
+      {t:"Have a great rest of your week!",l:"友好收尾"},
+      {t:"Hope to hear from you soon!",l:"期待回复"},
+      {t:"Thanks so much for your time!",l:"感谢时间"},
+      {t:"Really appreciate your help on this.",l:"表达感谢"},
+    ],
+    casual:[
+      {t:"Thanks a bunch! 😊",l:"轻松感谢"},
+      {t:"Hope to chat soon!",l:"期待联系"},
+      {t:"Talk soon!",l:"简短收尾"},
+      {t:"Cheers!",l:"英式再见"},
+      {t:"Let me know if you need anything!",l:"随时帮忙"},
+      {t:"Thanks heaps!",l:"澳式感谢"},
+      {t:"Catch you later!",l:"轻松再见"},
+      {t:"You're the best, thanks!",l:"活泼感谢"},
+    ]
+  }
+};
+
+const HOOK_PREVIEWS = {
+  job_app:`Dear Hiring Manager,\n\nHaving followed [Company]'s recent trajectory in [industry], the [Position] opening felt like a moment I couldn't pass up. My background — [strength] — maps directly onto the challenges your team is likely navigating right now.\n\nIn my most recent role, I led an initiative that [specific outcome with metric], and I'm confident a similar approach would translate here. What drew me most, beyond the role itself, is [company-specific reason].\n\nWould a brief 20-minute call next week work to explore the fit? I'd genuinely value the conversation.`,
+  interview_fu:`Dear [Interviewer Name],\n\nThank you for a genuinely engaging conversation about the [Position] role at [Company] on [date]. Your insights into how the team approaches [specific topic you discussed] were thought-provoking — it reinforced exactly why this opportunity excites me.\n\nI wanted to briefly underscore one point: my experience in [specific relevant skill] directly addresses what you described as the team's primary challenge for the next quarter.\n\nPlease don't hesitate to reach out if there's anything else I can provide. I'm flexible around your timeline.`,
+  default:`Dear [Recipient],\n\nI'll keep this focused on what matters most.\n\n[AI would generate highly contextual, natural-sounding content tailored to your specific situation — using precise vocabulary, the right register, and transitions that native speakers actually use rather than textbook phrases.]\n\nThe difference isn't just grammar. It's the specific details, the natural flow between paragraphs, and the closing that prompts exactly the response you want.`
+};
+
+// ═══════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════
+
+const S = {
+  mode:'free', scene:null,
+  freeF:'formal', aiF:'standard',
+  aiSub:'gen',
+  sentCat:'openings',
+  libOpen:false, histOpen:false,
+  cur:null
+};
+
+// ═══════════════════════════════════════════
+// TEMPLATE ENGINE
+// ═══════════════════════════════════════════
+
+function greet(r,f){
+  r=(r||'').trim();
+  if(f==='formal') return r?`Dear ${r},`:'Dear Sir or Madam,';
+  return r?`Hi ${r},`:'Hello,';
+}
+function close(s,f){
+  s=(s||'Your Name').trim();
+  if(f==='formal') return `Sincerely,\n${s}`;
+  if(f==='standard') return `Best regards,\n${s}`;
+  return `Thanks,\n${s}`;
+}
+function fmtDate(d){
+  if(!d) return '[日期]';
+  try{ return new Date(d+'T12:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}); }
+  catch(e){ return d; }
+}
+function leaveEn(raw){
+  if(!raw) return 'Leave';
+  const m=raw.match(/\(([^)]+)\)/);
+  return m?m[1]:raw;
+}
+
+function getTpl(sid,fields,f,rec,sndr){
+  const g=greet(rec,f);
+  const c=close(sndr,f);
+  switch(sid){
+    case 'job_app':{
+      const pos=fields.position||'[岗位]', co=fields.company||'[公司]', str=fields.strength||'[优势描述]';
+      if(f==='formal') return{ subject:`Application for the ${pos} Position at ${co}`, body:`${g}\n\nI am writing to express my strong interest in the ${pos} role at ${co}. ${str}, and I am confident this background positions me to make a meaningful contribution to your team.\n\nI would greatly appreciate the opportunity to discuss how my qualifications align with your requirements. My resume is attached for your consideration.\n\nThank you for your time and thoughtful review. I look forward to the possibility of speaking with you.\n\n${c}`};
+      if(f==='standard') return{ subject:`${pos} Application – ${sndr||'Application'}`, body:`${g}\n\nI'm reaching out to apply for the ${pos} opening at ${co}. ${str}, which I believe makes me a strong fit for this role.\n\nI've attached my resume and would love the chance to connect. Please feel free to reach out at your convenience.\n\n${c}`};
+      return{ subject:`Applying for ${pos} at ${co}`, body:`${g}\n\nI came across the ${pos} opening at ${co} and I'm genuinely excited about it! ${str} – feels like a great match.\n\nI've attached my resume. Would love to chat whenever works for you!\n\n${c}`};
+    }
+    case 'interview_fu':{
+      const pos=fields.position||'[岗位]', co=fields.company||'[公司]', d=fmtDate(fields.interview_date);
+      const type=fields.fu_type||'感谢面试官 + 确认进度';
+      const doT=type.includes('感谢'), doC=type.includes('确认');
+      let body='';
+      if(f==='formal'){ body=`I am writing to follow up regarding my interview for the ${pos} position at ${co} on ${d}.`; if(doT) body+=`\n\nI would like to sincerely thank you and the team for the opportunity. Our discussion provided valuable insight into the role's scope and deepened my enthusiasm for the position.`; if(doC) body+=`\n\nI also wanted to kindly inquire about the timeline for next steps and whether any additional information would be helpful.`; }
+      else if(f==='standard'){ body=`I wanted to follow up on my interview for the ${pos} role at ${co} on ${d}.`; if(doT) body+=`\n\nThank you so much for the time – I really enjoyed learning about the team and the work. It's made me even more excited about the opportunity.`; if(doC) body+=`\n\nI also wanted to check in on the timeline for next steps. Happy to provide anything else if that would help.`; }
+      else{ body=`Just a quick follow-up on my ${pos} interview at ${co} from ${d}!`; if(doT) body+=`\n\nReally enjoyed the chat – came away even more excited about the role!`; if(doC) body+=`\n\nAny update on timeline or next steps?`; }
+      return{ subject:f==='formal'?`Following Up: ${pos} Interview at ${co}`:f==='standard'?`Follow-Up – ${pos} Interview`:`Quick Follow-Up – ${pos}`, body:`${g}\n\n${body}\n\n${c}`};
+    }
+    case 'thank_you':{
+      const occ=fields.occasion||'[感谢事项]';
+      if(f==='formal') return{ subject:'Expression of Gratitude', body:`${g}\n\nI am writing to express my heartfelt gratitude for ${occ}. Your assistance has been truly invaluable, and I am deeply appreciative of the time and effort you devoted.\n\nYour generosity has made a significant difference, and I sincerely hope to have the opportunity to reciprocate.\n\n${c}`};
+      if(f==='standard') return{ subject:'Thank You', body:`${g}\n\nI just wanted to take a moment to sincerely thank you for ${occ}. It really meant a lot to me, and I appreciate the time and effort you put in.\n\nThank you again – it made a real difference!\n\n${c}`};
+      return{ subject:'Thank You So Much!', body:`${g}\n\nJust wanted to say a huge thank you for ${occ}! Seriously, it meant the world to me.\n\nYou're incredible – thanks again! 🙏\n\n${c}`};
+    }
+    case 'leave_req':{
+      const lt=leaveEn(fields.leave_type); const s=fmtDate(fields.start_date), e=fmtDate(fields.end_date); const rea=fields.reason?` due to ${fields.reason}`:'';
+      if(f==='formal') return{ subject:`${lt} Request: ${s} – ${e}`, body:`${g}\n\nI am writing to formally request ${lt} from ${s} to ${e}${rea}.\n\nPrior to my absence, I will ensure all current responsibilities are addressed and appropriate handover arrangements are in place. I am happy to coordinate with colleagues to minimize any disruption.\n\nPlease let me know if you require any supporting documentation. I appreciate your consideration.\n\n${c}`};
+      if(f==='standard') return{ subject:`Leave Request – ${s} to ${e}`, body:`${g}\n\nI'd like to request ${lt} from ${s} to ${e}${rea}.\n\nI'll make sure to get my work in order before I leave and coordinate any handover needed. Let me know if there's anything specific you'd like me to prepare.\n\n${c}`};
+      return{ subject:`Time Off – ${s} to ${e}`, body:`${g}\n\nHey, wanted to request some time off from ${s} to ${e}${rea}.\n\nI'll wrap everything up before I go and sort out any coverage. Let me know if that works!\n\n${c}`};
+    }
+    case 'meeting_inv':{
+      const topic=fields.topic||'[会议主题]', time=fields.time||'[时间]', loc=fields.location||'[地点/链接]'; const agd=fields.agenda; const agdFmt=agd?'\n\nAgenda:\n'+agd.split(/[,，、]/).map((a,i)=>`  ${i+1}. ${a.trim()}`).join('\n'):'';
+      if(f==='formal') return{ subject:`Meeting Invitation: ${topic}`, body:`${g}\n\nI would like to invite you to a meeting to discuss ${topic}.\n\nDate/Time: ${time}\nLocation/Link: ${loc}${agdFmt}\n\nPlease confirm your availability at your earliest convenience. If the proposed time is not suitable, I am happy to accommodate an alternative.\n\n${c}`};
+      if(f==='standard') return{ subject:`Meeting: ${topic}`, body:`${g}\n\nI'd like to schedule a meeting to discuss ${topic}.\n\nTime: ${time}\nWhere: ${loc}${agdFmt}\n\nLet me know if this works, or if you'd prefer a different time.\n\n${c}`};
+      return{ subject:`Meet About ${topic}?`, body:`${g}\n\nWant to get together to talk about ${topic}?\n\nI was thinking ${time} at ${loc}.${agd?`\n\nWe can cover: ${agd}.`:''}\n\nDoes that work?\n\n${c}`};
+    }
+    case 'follow_up':{
+      const os=fields.orig_subj||'[原邮件主题]', sent=fmtDate(fields.sent_date); const dl=fields.deadline?`. Ideally I'd appreciate hearing back by ${fields.deadline}`:'';
+      if(f==='formal') return{ subject:`Follow-Up: ${os}`, body:`${g}\n\nI hope this message finds you well. I am writing to follow up on my previous email regarding "${os}" sent on ${sent}, which remains unanswered.\n\nI understand you may have a demanding schedule and I apologize for any inconvenience. I wanted to kindly inquire whether you have had the opportunity to review my message${dl}.\n\nPlease do not hesitate to contact me if you require any further information.\n\n${c}`};
+      if(f==='standard') return{ subject:`Following Up – ${os}`, body:`${g}\n\nHope you're doing well! I wanted to follow up on my email from ${sent} about "${os}" – I hadn't heard back and wanted to check in.\n\nNo rush, but please let me know if you had a chance to look it over${dl}. Happy to provide more details if that helps.\n\n${c}`};
+      return{ subject:`Checking In on ${os}`, body:`${g}\n\nHey, just checking in on my email from ${sent} about "${os}" – thought it might have gotten buried! 😊\n\nWould love your thoughts whenever you get a chance${dl}.\n\n${c}`};
+    }
+    case 'decline_offer':{
+      const co=fields.company||'[公司]', pos=fields.position||'[岗位]'; const rea=fields.reason||'I have decided to pursue another opportunity that aligns more closely with my current career trajectory';
+      if(f==='formal') return{ subject:`Regarding the ${pos} Offer – ${co}`, body:`${g}\n\nThank you sincerely for offering me the ${pos} position at ${co}. It was a genuine privilege to meet with your team, and I was truly impressed by the company's culture and direction.\n\nAfter careful consideration, ${rea}. This was not an easy decision, and I hold ${co} in very high regard.\n\nI hope our paths will cross again and wish you and the team continued success.\n\n${c}`};
+      if(f==='standard') return{ subject:`Re: ${pos} Offer – Declining with Thanks`, body:`${g}\n\nThank you so much for the offer to join ${co} as a ${pos}. I really appreciated the time everyone took, and came away impressed by the team.\n\nAfter careful thought, ${rea}. It wasn't an easy call at all.\n\nHope we can stay in touch, and I wish you all the best finding the right person.\n\n${c}`};
+      return{ subject:`About the ${pos} Offer`, body:`${g}\n\nThank you so much for the ${pos} offer at ${co}! Really appreciated the opportunity and loved meeting everyone.\n\nAfter thinking it over, ${rea}. Tough decision!\n\nHope we can stay in touch – wishing you all the best! 🙏\n\n${c}`};
+    }
+    case 'biz_collab':{
+      const nc=fields.my_name||'[姓名/公司]', dir=fields.direction||'[合作方向]', next=fields.next_step||'[期望下一步]';
+      if(f==='formal') return{ subject:`Strategic Collaboration Proposal – ${dir}`, body:`${g}\n\nMy name is ${nc}, and I am writing to explore a potential strategic collaboration in the area of ${dir}.\n\nHaving followed your organization's work closely, I believe there is a compelling synergy between our respective capabilities that could create significant mutual value.\n\nI would welcome the opportunity to ${next}. Please let me know your availability at your convenience.\n\n${c}`};
+      if(f==='standard') return{ subject:`Business Collaboration Inquiry – ${dir}`, body:`${g}\n\nMy name is ${nc}, and I'm reaching out because I think there's a real opportunity for us to collaborate on ${dir}.\n\nI've been following your work and see strong alignment. I genuinely believe a partnership could be valuable for both sides.\n\nWould you be open to ${next}?\n\n${c}`};
+      return{ subject:`Interested in Collaborating on ${dir}?`, body:`${g}\n\nHi, I'm ${nc}! I came across your work and immediately thought there could be a great opportunity to team up on ${dir}.\n\nWould you be up for ${next}? I think it could be really exciting!\n\n${c}`};
+    }
+    case 'complaint':{
+      const item=fields.item||'[订单/产品]', prob=fields.problem||'[问题]', res=fields.resolution||'[解决方案]';
+      if(f==='formal') return{ subject:`Formal Complaint – ${item}`, body:`${g}\n\nI am writing to formally register a complaint regarding ${item}. I discovered the following issue: ${prob}.\n\nThis falls significantly below the expected standard, and I am requesting that you ${res} as an appropriate resolution.\n\nI trust this will be addressed promptly. Please confirm receipt and advise on the expected timeline for resolution.\n\n${c}`};
+      if(f==='standard') return{ subject:`Issue with ${item} – Requesting Assistance`, body:`${g}\n\nI'm writing about a problem I've experienced with ${item}. Specifically, ${prob}.\n\nI'd appreciate it if you could ${res} to resolve this. Could you let me know how to proceed and the expected timeframe?\n\n${c}`};
+      return{ subject:`Problem with My ${item}`, body:`${g}\n\nHey, wanted to flag an issue with ${item}. ${prob}, which was pretty frustrating.\n\nIs it possible to ${res}? Happy to provide more details if that helps – thanks!\n\n${c}`};
+    }
+    case 'apology':{
+      const inc=fields.incident||'[事项]', imp=fields.impact||'[影响]', rem=fields.remedy||'[补救措施]';
+      if(f==='formal') return{ subject:`Sincere Apology Regarding ${inc}`, body:`${g}\n\nI am writing to sincerely apologize for ${inc}. I fully acknowledge that ${imp}, and I take complete responsibility.\n\nTo address the situation, I have ${rem}. I am committed to ensuring this does not recur.\n\nPlease accept my sincere apologies. I value our relationship greatly and hope to regain your confidence.\n\n${c}`};
+      if(f==='standard') return{ subject:`Apologies for ${inc}`, body:`${g}\n\nI want to sincerely apologize for ${inc}. I understand that ${imp}, and I'm truly sorry for the inconvenience.\n\nTo make things right, I have ${rem}. I'll make sure this doesn't happen again.\n\nThank you for your patience and understanding.\n\n${c}`};
+      return{ subject:`Sorry About ${inc}`, body:`${g}\n\nI'm really sorry about ${inc}. I know that ${imp}, and I feel terrible about it.\n\nI've already ${rem} to fix things. Thanks so much for being patient! 🙏\n\n${c}`};
+    }
+    case 'intro':{
+      const nm=fields.name||'[被引荐人]', bg=fields.bg||'[背景]', pu=fields.purpose||'[目的]';
+      if(f==='formal') return{ subject:`Introduction: ${nm}`, body:`${g}\n\nI hope this message finds you well. I am writing to introduce ${nm}, who ${bg}. Given your work in this area, I believe ${nm}'s profile is highly relevant, as ${pu}.\n\nWith your permission, I would very much like to facilitate a connection. Please feel free to reach out to ${nm} directly, or I would be happy to arrange a formal introduction.\n\n${c}`};
+      if(f==='standard') return{ subject:`Introducing ${nm}`, body:`${g}\n\nI'd love to introduce you to ${nm}, who ${bg}. I thought of you immediately because ${pu}.\n\nI think this could be a great connection – I'll let you two take it from here!\n\n${c}`};
+      return{ subject:`You Should Meet ${nm}!`, body:`${g}\n\nHey! Wanted to introduce you to ${nm} – they ${bg}. I immediately thought of you because ${pu}.\n\nYou two should definitely connect! 🤝\n\n${c}`};
+    }
+    case 'resign':{
+      const ld=fmtDate(fields.last_day), ho=fields.handover||'[交接安排]';
+      if(f==='formal') return{ subject:`Notice of Resignation – Effective ${ld}`, body:`${g}\n\nI am writing to formally tender my resignation, with my last working day being ${ld}. This decision was not made lightly, and I am sincerely grateful for the professional opportunities and personal growth this role has provided.\n\nTo facilitate a seamless transition, I ${ho}. I am fully committed to ensuring continuity during this period.\n\nThank you for your guidance and support throughout my tenure. It has been a privilege.\n\n${c}`};
+      if(f==='standard') return{ subject:`Resignation – Last Day: ${ld}`, body:`${g}\n\nI wanted to formally let you know that I've decided to resign, with my last day being ${ld}. It wasn't an easy decision – I've genuinely valued my time here.\n\nTo make the transition smooth, I ${ho}. Please let me know if there's anything else I can do.\n\nThank you for everything.\n\n${c}`};
+      return{ subject:`Stepping Down – Last Day ${ld}`, body:`${g}\n\nWanted to give you a heads up that I've decided to move on, with ${ld} as my last day. Bittersweet for sure!\n\nI'll make sure to ${ho}. Let me know how I can help with the transition! 👋\n\n${c}`};
+    }
+    default:
+      return{subject:'Email',body:`${g}\n\n[内容]\n\n${c}`};
+  }
+}
+
+// ═══════════════════════════════════════════
+// UI RENDER
+// ═══════════════════════════════════════════
+
+function renderScenes(){
+  document.getElementById('scene-grid').innerHTML=SCENES.map(s=>
+    `<button class="sb" id="sb-${s.id}" onclick="pickScene('${s.id}')">
+      <span class="ic">${s.icon}</span>${s.name}
+    </button>`).join('');
+}
+
+function renderDynFields(sid){
+  const sc=SCENES.find(s=>s.id===sid);
+  if(!sc) return;
+  document.getElementById('fields-title').textContent=`${sc.icon} ${sc.name} · 填写详情`;
+  document.getElementById('dyn-fields').innerHTML=sc.fields.map(f=>{
+    if(f.type==='select') return `<div class="fg">
+      <label>${f.label} ${f.req?'<span class="req">*</span>':'<span class="opt">选填</span>'}</label>
+      <select id="f-${f.id}">${f.opts.map(o=>`<option>${o}</option>`).join('')}</select>
+    </div>`;
+    if(f.type==='date') return `<div class="fg">
+      <label>${f.label} ${f.req?'<span class="req">*</span>':'<span class="opt">选填</span>'}</label>
+      <input type="date" id="f-${f.id}">
+    </div>`;
+    return `<div class="fg">
+      <label>${f.label} ${f.req?'<span class="req">*</span>':'<span class="opt">选填</span>'}</label>
+      <input type="text" id="f-${f.id}" placeholder="${f.ph||''}">
+    </div>`;
+  }).join('');
+}
+
+function renderSentItems(){
+  const f=S.mode==='free'?S.freeF:S.aiF;
+  const items=(SL[S.sentCat]||{})[f]||[];
+  document.getElementById('sent-items').innerHTML=items.map((item,i)=>
+    `<div class="si" onclick="insertSent(${i},'${S.sentCat}','${f}')">
+      <span class="st">"${item.t}"</span>
+      <span class="sl">${item.l}</span>
+    </div>`).join('');
+}
+
+function renderHist(){
+  const h=getHist();
+  document.getElementById('hist-cnt').textContent=`共 ${h.length} 封`;
+  const list=document.getElementById('hist-list');
+  if(!h.length){list.innerHTML='<div class="hist-empty">暂无历史记录 · 生成邮件后点击 ⭐ 保存</div>';return;}
+  list.innerHTML=h.map(item=>`
+    <div class="hi">
+      <button class="hstar" onclick="toggleStar('${item.id}')" title="${item.starred?'取消收藏':'收藏'}">${item.starred?'⭐':'☆'}</button>
+      <div class="hmeta" onclick="loadHist('${item.id}')">
+        <div class="hsubj">${esc(item.subject||'(无主题)')}</div>
+        <div class="hinfo">${item.scene||''} · ${item.formality||''} · ${new Date(item.ts).toLocaleDateString('zh-CN')}</div>
+      </div>
+      <button class="hdel" onclick="delHist('${item.id}')" title="删除">✕</button>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════
+// ACTIONS
+// ═══════════════════════════════════════════
+
+function pickScene(id){
+  S.scene=id;
+  document.querySelectorAll('.sb').forEach(b=>b.classList.remove('on'));
+  document.getElementById('sb-'+id)?.classList.add('on');
+  ['c-settings','c-fields','c-lib','free-gbtn'].forEach(i=>{
+    document.getElementById(i)?.classList.remove('hidden');
+  });
+  renderDynFields(id);
+  renderSentItems();
+  document.getElementById('c-settings').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function setFormality(mode,level){
+  if(mode==='free'){
+    S.freeF=level;
+    document.querySelectorAll('#free-frow .fb').forEach(b=>b.classList.toggle('on',b.dataset.v===level));
+  } else {
+    S.aiF=level;
+    ['ai-frow-gen','ai-frow-polish','ai-frow-reply'].forEach(rowId=>{
+      const r=document.getElementById(rowId);
+      if(r) r.querySelectorAll('.fb').forEach(b=>b.classList.toggle('on',b.dataset.v===level));
+    });
+  }
+  renderSentItems();
+}
+
+function switchMode(mode){
+  S.mode=mode;
+  document.getElementById('free-panel').classList.toggle('hidden',mode!=='free');
+  document.getElementById('ai-panel').classList.toggle('hidden',mode!=='ai');
+  document.getElementById('btn-free').classList.toggle('on',mode==='free');
+  document.getElementById('btn-ai').classList.toggle('on',mode==='ai');
+  hideResult();
+}
+
+function setAISub(sub){
+  S.aiSub=sub;
+  ['gen','polish','reply'].forEach(s=>{
+    document.getElementById('ai-'+s).classList.toggle('hidden',s!==sub);
+  });
+  document.querySelectorAll('.subtab').forEach((t,i)=>{
+    t.classList.toggle('on',['gen','polish','reply'][i]===sub);
+  });
+}
+
+function toggleLib(){
+  S.libOpen=!S.libOpen;
+  document.getElementById('lib-body').classList.toggle('hidden',!S.libOpen);
+  document.getElementById('lib-ti').classList.toggle('open',S.libOpen);
+}
+
+function showSentCat(cat){
+  S.sentCat=cat;
+  document.querySelectorAll('.stab').forEach(t=>t.classList.toggle('on',t.dataset.cat===cat));
+  renderSentItems();
+}
+
+function insertSent(idx,cat,f){
+  const item=(SL[cat]||{})[f]?.[idx];
+  if(!item) return;
+  const curF=S.mode==='free'?S.freeF:S.aiF;
+  
+  if(S.mode==='ai'){
+    const tid=S.aiSub==='gen'?'ai-intent':S.aiSub==='polish'?'ai-draft':'ai-reply-pts';
+    const el=document.getElementById(tid);
+    if(el){ el.value+=(el.value&&!el.value.endsWith('\n')?'\n':'')+item.t; el.focus(); }
+  } else if (S.mode === 'free' && !document.getElementById('result-area').classList.contains('hidden')) {
+    // 免费模式：直接插入到结果草稿框
+    const el = document.getElementById('r-en');
+    el.value += (el.value && !el.value.endsWith('\n') ? '\n' : '') + item.t;
+    adjustHeight(el);
+    el.focus();
+  }
+
+  copyToClip(item.t);
+  const warn=f!==curF?` ⚠️ 风格为「${f==='formal'?'正式':f==='standard'?'标准':'轻松'}」，注意匹配`:'';
+  toast('✅ 已复制并插入'+warn);
+}
+
+function chkSensitive(el,warnId){
+  const t=el.value, found=[];
+  if(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/.test(t)) found.push('邮箱地址');
+  if(/1[3-9]\d{9}/.test(t)) found.push('手机号');
+  if(/[¥$€£]\s*[\d,]+/.test(t)||/\d+\s*(万|元|美元|USD|RMB)/.test(t)) found.push('金额信息');
+  if(/\d{3,4}[-\s]\d{3,4}[-\s]\d{3,4}/.test(t)) found.push('电话号码');
+  const w=document.getElementById(warnId);
+  if(!w) return;
+  if(found.length){
+    w.textContent=`⚠️ 检测到可能的敏感信息：${found.join('、')}，建议替换为占位符再提交`;
+    w.classList.remove('hidden');
+  } else { w.classList.add('hidden'); }
+}
+
+function adjustHeight(el) {
+  el.style.height = 'auto';
+  el.style.height = (el.scrollHeight + 2) + 'px';
+}
+
+// 给文本域绑定自适应高度事件
+document.getElementById('r-en').addEventListener('input', function() {
+  adjustHeight(this);
+});
+
+// ═══════════════════════════════════════════
+// GENERATE FREE
+// ═══════════════════════════════════════════
+
+function generateFree(){
+  if(!S.scene){ toast('请先选择邮件场景'); return; }
+  const sc=SCENES.find(s=>s.id===S.scene);
+  const sender=document.getElementById('free-sender').value.trim();
+  if(!sender){ toast('请填写你的署名'); document.getElementById('free-sender').focus(); return; }
+  
+  // 保存署名
+  localStorage.setItem('jt_sender', sender);
+  
+  for(const f of sc.fields){
+    if(f.req){
+      const el=document.getElementById('f-'+f.id);
+      if(el&&!el.value.trim()){ toast(`请填写「${f.label}」`); el.focus(); return; }
+    }
+  }
+  const fields={};
+  sc.fields.forEach(f=>{ const el=document.getElementById('f-'+f.id); if(el) fields[f.id]=el.value.trim(); });
+  const rec=document.getElementById('free-rec').value.trim();
+  const tpl=getTpl(S.scene,fields,S.freeF,rec,sender);
+  S.cur={...tpl,scene:sc.name,formality:S.freeF,mode:'free'};
+  showResult(tpl.subject,tpl.body,null,null,'free');
+}
+
+// ═══════════════════════════════════════════
+// GENERATE AI
+// ═══════════════════════════════════════════
+
+async function generateAI(){
+  const key=document.getElementById('api-key').value.trim();
+  if(!key){ toast('请输入 API Key'); document.getElementById('api-key').focus(); return; }
+  if(document.getElementById('rem-key').checked) localStorage.setItem('jt_ek',key);
+
+  // 敏感信息硬拦截
+  const tid = S.aiSub === 'gen' ? 'warn-intent' : S.aiSub === 'polish' ? 'warn-draft' : 'warn-thread';
+  const w = document.getElementById(tid);
+  if (w && !w.classList.contains('hidden')) {
+    if(!confirm("⚠️ 检测到未处理的敏感信息，可能存在隐私泄露风险。确认直接发送给大模型吗？\n建议点击「取消」将具体人名/金额替换为占位符。")) return;
+  }
+
+  const model=document.getElementById('ai-model').value;
+  const fLabel=S.aiF==='formal'?'formal and professional':S.aiF==='standard'?'standard professional':'casual and friendly';
+  let sys='',usr='';
+
+  if(S.aiSub==='gen'){
+    const intent=document.getElementById('ai-intent').value.trim();
+    const rec=document.getElementById('ai-rec').value.trim();
+    const sndr=document.getElementById('ai-sender').value.trim();
+    if(!intent){ toast('请描述邮件内容'); return; }
+    if(sndr) localStorage.setItem('jt_sender', sndr);
+    sys=`You are a professional English email writer. Generate a complete, natural English email based on the user's Chinese description. Use ${fLabel} tone. Output EXACTLY in this format (no extra text):
+SUBJECT: [subject line]
+---ENGLISH---
+[complete email body]
+---CHINESE---
+[complete Chinese translation of the email body]`;
+    usr=`写一封英文邮件，内容：${intent}\n收件人称呼：${rec||'（自行判断）'}\n署名：${sndr||'Your Name'}\n语气：${fLabel}`;
+
+  } else if(S.aiSub==='polish'){
+    const draft=document.getElementById('ai-draft').value.trim();
+    const pref=document.getElementById('polish-pref').value;
+    if(!draft){ toast('请粘贴需要润色的草稿'); return; }
+    sys=`You are an expert English editor. Polish the given English to be ${pref==='natural'?'natural and idiomatic':'professional while preserving style'} with ${fLabel} tone. Output EXACTLY in this format (no extra text):
+SUBJECT: [subject if detectable, else N/A]
+---ENGLISH---
+[polished version]
+---CHANGES---
+[List up to 8 key changes: "原：xxx → 改：xxx（原因：xxx）" one per line]`;
+    usr=`请润色以下英文草稿：\n\n${draft}`;
+
+  } else {
+    const thread=document.getElementById('ai-thread').value.trim();
+    const pts=document.getElementById('ai-reply-pts').value.trim();
+    const sndr=document.getElementById('ai-reply-sender').value.trim();
+    if(!thread){ toast('请粘贴邮件串内容'); return; }
+    if(!pts){ toast('请填写你的回复要点'); return; }
+    if(sndr) localStorage.setItem('jt_sender', sndr);
+    sys=`You are a professional English email writer. Read the full email thread and write a reply based on the user's key points. Use ${fLabel} tone. Output EXACTLY in this format (no extra text):
+SUBJECT: [Re: original subject]
+---ENGLISH---
+[reply email body]
+---CHINESE---
+[Chinese translation of the reply]`;
+    usr=`邮件串：\n${thread}\n\n我的回复要点：${pts}\n署名：${sndr||'Your Name'}`;
+  }
+
+  showLoading();
+
+  // 引入超时机制
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 60000); // 60秒超时
+
+  try {
+    const res=await fetch('https://jotarou.com/v1/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':`Bearer ${key}`},
+      body:JSON.stringify({model,messages:[{role:'system',content:sys},{role:'user',content:usr}],max_tokens:2000,temperature:0.7}),
+      signal: controller.signal
+    });
+    
+    clearTimeout(timeoutId);
+
+    if(!res.ok){
+      let errMsg = `HTTP ${res.status}`;
+      if (res.status === 401) errMsg = "API Key 无效或未授权，请检查后重试。";
+      else if (res.status === 429) errMsg = "请求过于频繁或额度已耗尽，请稍后再试。";
+      else {
+        const err=await res.json().catch(()=>({}));
+        errMsg = err.error?.message || errMsg;
+      }
+      throw new Error(errMsg);
+    }
+    const data=await res.json();
+    const text=data.choices?.[0]?.message?.content||'';
+    
+    // 高容错正则：适配 \r\n, 首尾空格，并忽略大小写
+    const subj=(text.match(/SUBJECT:\s*(.+)/i)||[])[1]?.trim()||'';
+    const en=(text.match(/---ENGLISH---\s*?\r?\n([\s\S]*?)(?=---CHINESE---|---CHANGES---|$)/i)||[])[1]?.trim()||text;
+    const zh=(text.match(/---CHINESE---\s*?\r?\n([\s\S]*?)$/i)||[])[1]?.trim()||'';
+    const chg=(text.match(/---CHANGES---\s*?\r?\n([\s\S]*?)$/i)||[])[1]?.trim()||'';
+    
+    S.cur={subject:subj,body:en,chinese:zh,changes:chg,mode:'ai',formality:S.aiF};
+    showResult(subj,en,zh,chg,'ai');
+  } catch(e){
+    hideLoading();
+    if (e.name === 'AbortError') toast('⚠️ 生成失败：请求超时，请检查网络');
+    else toast('⚠️ 生成失败：' + (e.message || '未知错误'));
+  }
+}
+
+// ═══════════════════════════════════════════
+// RESULT DISPLAY
+// ═══════════════════════════════════════════
+
+function showLoading(){
+  document.getElementById('result-area').classList.remove('hidden');
+  document.getElementById('r-loading').classList.remove('hidden');
+  document.getElementById('r-content').classList.add('hidden');
+  // 禁用生成按钮，防抖/防连点并发
+  document.querySelectorAll('.gbtn-wrap button').forEach(b => b.disabled = true);
+  document.getElementById('result-area').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function hideLoading(){ 
+  document.getElementById('r-loading').classList.add('hidden'); 
+  document.querySelectorAll('.gbtn-wrap button').forEach(b => b.disabled = false);
+}
+function hideResult(){ document.getElementById('result-area').classList.add('hidden'); }
+
+function showResult(subj,en,zh,changes,mode){
+  hideLoading();
+  document.getElementById('result-area').classList.remove('hidden');
+  document.getElementById('r-content').classList.remove('hidden');
+  document.getElementById('r-subj').textContent=subj;
+  
+  const rEn = document.getElementById('r-en');
+  rEn.value=en;
+  // 延迟一帧确保 DOM 渲染后再计算高度
+  setTimeout(() => adjustHeight(rEn), 0); 
+
+  const zhCol=document.getElementById('zh-col');
+  const zhRow=document.getElementById('zh-toggle-row');
+  const grid=document.getElementById('body-grid');
+  const zhBtn=document.getElementById('zh-btn');
+
+  if(zh){
+    document.getElementById('r-zh').textContent=zh;
+    if(window.innerWidth>=580){
+      grid.classList.add('bi');
+      zhCol.classList.remove('hidden');
+      zhRow.classList.add('hidden');
+    } else {
+      grid.classList.remove('bi');
+      zhCol.classList.add('hidden');
+      zhRow.classList.remove('hidden');
+      zhBtn.textContent='显示中文对照';
+    }
+  } else {
+    zhCol.classList.add('hidden');
+    grid.classList.remove('bi');
+    zhRow.classList.add('hidden');
+  }
+
+  // Changes box
+  const cbox=document.getElementById('changes-box');
+  const ccont=document.getElementById('changes-content');
+  if(changes){
+    ccont.innerHTML=changes.split('\n').filter(l=>l.trim()).map(l=>`<div class="ci">${esc(l)}</div>`).join('');
+    cbox.classList.remove('hidden');
+  } else { cbox.classList.add('hidden'); }
+
+  // AI hook (free mode only)
+  const hook=document.getElementById('ai-hook');
+  if(mode==='free'){
+    document.getElementById('hook-txt').textContent=HOOK_PREVIEWS[S.scene]||HOOK_PREVIEWS.default;
+    hook.classList.remove('hidden');
+  } else { hook.classList.add('hidden'); }
+
+  document.getElementById('result-area').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function toggleZh(){
+  const zhCol=document.getElementById('zh-col');
+  const btn=document.getElementById('zh-btn');
+  const hidden=zhCol.classList.contains('hidden');
+  zhCol.classList.toggle('hidden',!hidden);
+  btn.textContent=hidden?'隐藏中文对照':'显示中文对照';
+  
+  // 移动端体验优化：展开后自动滚动
+  if (hidden && window.innerWidth < 580) {
+    setTimeout(() => zhCol.scrollIntoView({behavior: 'smooth', block: 'nearest'}), 50);
+  }
+}
+
+// ═══════════════════════════════════════════
+// COPY / EXPORT
+// ═══════════════════════════════════════════
+
+function inlineFeedback(btn, orig){
+  if(!btn) return;
+  const w=btn.offsetWidth; btn.style.width=w+'px';
+  btn.textContent='✅ 已复制';
+  setTimeout(()=>{ btn.textContent=orig; btn.style.width=''; }, 1500);
+}
+
+function copySubj(btn){ 
+  copyToClip('Subject: '+document.getElementById('r-subj').textContent); 
+  inlineFeedback(btn,'复制主题行'); 
+}
+function copyBody(btn){ 
+  copyToClip(document.getElementById('r-en').value); 
+  inlineFeedback(btn,'复制正文'); 
+}
+function copyAll(btn){
+  const s=document.getElementById('r-subj').textContent;
+  const b=document.getElementById('r-en').value;
+  copyToClip(`Subject: ${s}\n\n${b}`); 
+  inlineFeedback(btn,'复制全部');
+}
+function openMailto(){
+  const s=document.getElementById('r-subj').textContent;
+  const b=document.getElementById('r-en').value;
+  if(!b){ toast('请先生成邮件'); return; }
+  window.location.href=`mailto:?subject=${encodeURIComponent(s)}&body=${encodeURIComponent(b.replace(/\n/g,'\r\n'))}`;
+}
+function dlTxt(){
+  const s=document.getElementById('r-subj').textContent;
+  const b=document.getElementById('r-en').value;
+  if(!b){ toast('请先生成邮件'); return; }
+  const blob=new Blob([`Subject: ${s}\n\n${b}`],{type:'text/plain;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download=`email_${new Date().toISOString().slice(0,10)}.txt`; a.click();
+  URL.revokeObjectURL(url);
+  toast('📥 已下载');
+}
+
+function copyToClip(text,msg){
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(text).then(()=>{if(msg)toast('✅ '+msg)}).catch(()=>fbCopy(text,msg));
+  } else { fbCopy(text,msg); }
+}
+function fbCopy(text,msg){
+  const el=document.createElement('textarea');
+  el.value=text; el.style.cssText='position:fixed;opacity:0';
+  document.body.appendChild(el); el.select();
+  try{ document.execCommand('copy'); if(msg) toast('✅ '+msg); }
+  catch(e){ toast('复制失败，请手动复制'); }
+  document.body.removeChild(el);
+}
+
+// ═══════════════════════════════════════════
+// HISTORY
+// ═══════════════════════════════════════════
+
+const HK='jt_email_hist', HMAX=50;
+function getHist(){ try{ return JSON.parse(localStorage.getItem(HK)||'[]'); } catch(e){ return []; } }
+function saveHist(h){ localStorage.setItem(HK,JSON.stringify(h)); }
+
+function saveCurrent(){
+  if(!S.cur||!document.getElementById('r-en').value){ toast('暂无内容可保存'); return; }
+  const h=getHist();
+  h.unshift({
+    id:Date.now().toString(),
+    v:1, 
+    subject:S.cur.subject,
+    body:document.getElementById('r-en').value, 
+    chinese:S.cur.chinese||'',
+    scene:S.cur.scene||S.scene,
+    formality:S.cur.formality,
+    mode:S.cur.mode,
+    starred:false,
+    ts:Date.now()
+  });
+  if(h.length>HMAX) h.pop();
+  saveHist(h); renderHist(); toast('✅ 已保存到历史记录');
+}
+function toggleStar(id){
+  const h=getHist(); const i=h.findIndex(x=>x.id===id); if(i===-1) return;
+  h[i].starred=!h[i].starred;
+  if(h[i].starred){ const item=h.splice(i,1)[0]; h.unshift(item); }
+  saveHist(h); renderHist();
+}
+function loadHist(id){
+  const item=getHist().find(x=>x.id===id); if(!item) return;
+  S.cur=item; showResult(item.subject,item.body,item.chinese,null,item.mode);
+  toast('📂 已加载历史邮件');
+}
+function delHist(id){
+  saveHist(getHist().filter(x=>x.id!==id)); renderHist(); toast('🗑 已删除');
+}
+function toggleHist(){
+  S.histOpen=!S.histOpen;
+  document.getElementById('hist-body').classList.toggle('hidden',!S.histOpen);
+  document.getElementById('hist-ti').classList.toggle('open',S.histOpen);
+  if(S.histOpen) renderHist();
+}
+
+// ═══════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════
+
+function toast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.classList.add('show');
+  clearTimeout(el._t); el._t=setTimeout(()=>el.classList.remove('show'),2600);
+}
+function esc(s){
+  return String(s).replace(/&/g,'&amp;')
+                  .replace(/</g,'&lt;')
+                  .replace(/>/g,'&gt;')
+                  .replace(/"/g,'&quot;')
+                  .replace(/'/g,'&#039;');
+}
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+
+(function init(){
+  renderScenes();
+  renderHist();
+  
+  // Restore key
+  const k=localStorage.getItem('jt_ek');
+  if(k){ document.getElementById('api-key').value=k; document.getElementById('rem-key').checked=true; }
+  
+  // Restore sender name
+  const savedSender = localStorage.getItem('jt_sender');
+  if(savedSender){
+    const fs = document.getElementById('free-sender');
+    const as = document.getElementById('ai-sender');
+    const ar = document.getElementById('ai-reply-sender');
+    if(fs) fs.value = savedSender;
+    if(as) as.value = savedSender;
+    if(ar) ar.value = savedSender;
+  }
+
+  // Initial formality display
+  setFormality('free','formal');
+  setFormality('ai','standard');
+  
+  // Responsive handler
+  window.addEventListener('resize',()=>{
+    if(S.cur?.chinese){
+      const grid=document.getElementById('body-grid');
+      const zhCol=document.getElementById('zh-col');
+      const zhRow=document.getElementById('zh-toggle-row');
+      if(window.innerWidth>=580){
+        grid.classList.add('bi'); zhCol.classList.remove('hidden'); zhRow.classList.add('hidden');
+      } else {
+        grid.classList.remove('bi');
+      }
+    }
+  });
+})();
+</script>
+</body>
+</html>
