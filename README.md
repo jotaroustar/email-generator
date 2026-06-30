@@ -1,7 +1,4 @@
 # 英文邮件生成器
-
-**jotarou.com AI 工具矩阵** · [立即使用 →](https://jotarou.com/tools/email/)
-
 ---
 
 ## 工具简介
